@@ -55,7 +55,7 @@ class User(db.Model, UserMixin, Base):
     password = db.Column(db.String(120), unique=True, nullable=False)
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
-
+db.create_all()
 
 class BlogPost(db.Model, Base):
     __tablename__ = "blog_posts"
@@ -69,9 +69,8 @@ class BlogPost(db.Model, Base):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
-
     comments = relationship("Comment", back_populates="parent_post")
-    # db.create_all()
+db.create_all()
 
 
 class Comment(db.Model):
@@ -84,7 +83,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
     parent_post = relationship("BlogPost", back_populates="comments")
     text = db.Column(db.Text, nullable=False)
-
+db.create_all()
 
 def admin_only(f):
     @wraps(f)
@@ -242,4 +241,3 @@ def delete_post(post_id):
 
 if __name__ == "__main__":
     app.run(debug=True)
-    db.create_all()
